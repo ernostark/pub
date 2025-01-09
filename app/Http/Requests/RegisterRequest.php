@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
     {
         return [
 
-            "name" => "required|min:3|max:10|alpha",
+            "name" => "required|min:3|max:10|alpha|unique:users,name",
             "email" => "required|email|unique:users,email",
             "password" => ["required",
                             "min:8",
@@ -47,9 +47,10 @@ class RegisterRequest extends FormRequest
             "name.min" => "Túl kevés karakter!",
             "name.max" => "Túl hosszú név!",
             "name.alpha" => "Csak betűk lehetnek!",
+            "name.unique" => "Hibás felhasználónév!",
             "email.required" => "Email elvárt!",
             "email.email" => "Nem valós email cím!",
-            "email.unique" => "Email cím már létezik!",
+            "email.unique" => "Hibás email cím!",
             "password.required" => "Jelszó elvárt!",
             "password.min" => "Túl rövid jelszó!",
             "password.regex" => "Tartalmaznia kell kis- és nagybetűt és számot!",

@@ -18,9 +18,11 @@ class AuthController extends ResponseController
         $request->validated();
 
         $user = User::create([
+
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"])
+
         ]);
 
         return $this->sendResponse( $user, "Sikeres regisztráció" );
@@ -28,12 +30,26 @@ class AuthController extends ResponseController
     }
 
     public function login( LoginRequest $request ){
+
         $request->validated();
 
-        if ( Auth::attempt([ "name" => $request["name"], "password" => $request["password"]])) {
-            return Auth::user();
+        if ( Auth::attempt([ "name" => $request["name"], "password" => $request["password"] ]) ){
+
+            $user = Auth::user();
+            $token = $user->createToken( $user->name . "Token" )->plainTextToken;
+            $data = [
+                "name" => $user->name,
+                "token" => $token
+            ]; 
+            
+            return $data;
+
+            return $this->sendResponse( $user->name, "Sikeres bejelentkezés!" );
+
         }else{
-            return "He he he...";
+
+            return $this->sendError( "Azonosítási hiba!", "Hibás felhasználónév vagy jelszó!", 405 );
+
         }
 
     }
@@ -43,7 +59,9 @@ class AuthController extends ResponseController
     }
 
     public function getUsers(){
+
         $users = User::all();
         return $users;
+
     }
 }
