@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+
+            $table->integer( "login_counter" )->after( "password" )->default( 0 )->nullable();
+            $table->timestamp( "banning_time" )->before( "remember_token" )->default( null )->nullable();
+
         });
     }
 
@@ -22,7 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn( "login_counter" );
+            $table->dropColumn( "banning_time" );
         });
     }
 };

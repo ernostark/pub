@@ -36,6 +36,7 @@ class AuthController extends ResponseController
         if ( Auth::attempt([ "name" => $request["name"], "password" => $request["password"] ]) ){
 
             $user = Auth::user();
+            ( new BannerController )->resetLoginCounter( $user->name );
             $token = $user->createToken( $user->name . "Token" )->plainTextToken;
             $data = [
                 "name" => $user->name,
@@ -46,7 +47,20 @@ class AuthController extends ResponseController
 
         }else{
 
-            return $this->sendError( "Azonosítási hiba!", "Hibás felhasználónév vagy jelszó!", 405 );
+            ( new BannerController )->setLoginCounter( $request["name"] );
+
+            $counter = ( new BannerController )->getLoginCounter( $request["name"] );
+
+            if ( $counter > 3 ) {
+
+                $time = Carbon::now();
+
+                return $time;
+            }
+
+            return $counter;
+
+            //return $this->sendError( "Azonosítási hiba!", "Hibás felhasználónév vagy jelszó!", 405 );
 
         }
 
