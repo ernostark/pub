@@ -42,9 +42,7 @@ class AuthController extends ResponseController
                 "token" => $token
             ]; 
             
-            return $data;
-
-            return $this->sendResponse( $user->name, "Sikeres bejelentkezés!" );
+            return $this->sendResponse( $data, "Sikeres bejelentkezés!" );
 
         }else{
 
@@ -55,6 +53,12 @@ class AuthController extends ResponseController
     }
 
     public function logout(){
+
+        $user = auth("sanctum")->user();
+        
+        $user->currentAccessToken()->delete();
+
+        return $this->sendResponse( $user->name, "Sikeres kijelentkezés!" );
 
     }
 

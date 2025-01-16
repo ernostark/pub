@@ -12,7 +12,8 @@ Route::get('/user', function (Request $request) {
 
 Route::post( "/register", [ AuthController::class, "register" ] );
 Route::post( "/login", [ AuthController::class, "login" ] );
-Route::get( "/users", [ AuthController::class, "getUsers" ]);
+Route::post( "/logout", [ AuthController::class, "logout" ]);
+Route::post( "/users", [ AuthController::class, "getUsers" ]);
 
 Route::get( "/drinks", [ DrinkController::class, "getDrinks" ]);
 Route::get( "/drink", [ DrinkController::class, "getDrink" ]);
